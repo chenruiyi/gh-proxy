@@ -28,6 +28,12 @@ async function handleRequest(request) {
   // 解析出真实目标，供后续 fetch 使用
   const realTarget = new URL(targetUrl)
 
+  // 只允许加速特定站点
+  const allowHosts = ['github.com', 'raw.githubusercontent.com']
+  if (!allowHosts.includes(realTarget.host)) {
+    return new Response('仅允许加速 GitHub 相关文件', { status: 403 })
+  }
+
   // 复制原请求头，准备传给目标服务
   const newHeaders = new Headers(request.headers)
 
